@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-
 import AppLog from 'logger/logger.service';
+import StardeosUserBirthdateWrong from './exceptions/StardeosUserBirthdateWrong';
+
+import validateBirthdate from 'helpers/validateBirthdate';
 
 @Injectable()
 export default class UserService {
@@ -9,11 +11,16 @@ export default class UserService {
   }
 
   /**
-   * Login user skypostal-api
-   * @param {username} username
-   * @param {password} password
+   * Signup user
+   * @param {body} body
    */
-  async userStardeosSignup(body: object) {
-    console.log(body);
+  async userStardeosSignup(body: any) {
+    if (!body.birthDate) {
+      throw new StardeosUserBirthdateWrong();
+    }
+
+    if (!validateBirthdate(body.birthDate)) {
+      throw new StardeosUserBirthdateWrong();
+    }
   }
 }
